@@ -5,6 +5,7 @@ import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.JavaRunConfigurationBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.executors.DefaultRunExecutor;
+import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.runners.ProgramRunner;
@@ -61,18 +62,18 @@ public class RunWithEdgePairCoverageAction extends AnAction {
             RunConfiguration configuration = currentSettings.getConfiguration();
 
             // Modificar las opciones de VM para añadir -javaagent
-            if (configuration instanceof ApplicationConfiguration) {
-                ApplicationConfiguration appConfig = (ApplicationConfiguration) configuration;
+            if (configuration instanceof JUnitConfiguration) {
+                JUnitConfiguration junitConfig = (JUnitConfiguration) configuration;
 
-                String currentVmOptions = appConfig.getVMParameters();
+                String currentVmOptions = junitConfig.getVMParameters();
                 String javaAgentParameter = "-javaagent:/ruta/al/agente.jar"; // Ruta al agente
 
                 if (currentVmOptions == null || !currentVmOptions.contains(javaAgentParameter)) {
-                    appConfig.setVMParameters((currentVmOptions != null ? currentVmOptions + " " : "") + javaAgentParameter);
+                    junitConfig.setVMParameters((currentVmOptions != null ? currentVmOptions + " " : "") + javaAgentParameter);
                 }
 
                 // Opcional: añadir argumentos para los métodos seleccionados
-                // appConfig.setProgramParameters(String.join(" ", metodosSeleccionados));
+                // junitConfig.setProgramParameters(String.join(" ", metodosSeleccionados));
 
                 // Crear el entorno de ejecución
                 ExecutionEnvironmentBuilder builder = null;
@@ -85,11 +86,11 @@ public class RunWithEdgePairCoverageAction extends AnAction {
                 ExecutionEnvironment environment = builder.build();
 
                 // Ejecutar la configuración modificada
-                ProgramRunner<?> runner = ProgramRunner.getRunner(DefaultRunExecutor.EXECUTOR_ID, appConfig);
+                ProgramRunner<?> runner = ProgramRunner.getRunner(DefaultRunExecutor.EXECUTOR_ID, junitConfig);
                 if (runner != null) {
                     try {
                         runner.execute(environment);
-                        Messages.showInfoMessage("Ejecución con -javaagent iniciada", "Información");
+                        Messages.showInfoMessage("Ejecución de pruebas JUnit con -javaagent iniciada", "Información");
                     } catch (Exception ex) {
                         Messages.showErrorDialog("Error al iniciar la ejecución: " + ex.getMessage(), "Error");
                     }
@@ -97,7 +98,7 @@ public class RunWithEdgePairCoverageAction extends AnAction {
                     Messages.showErrorDialog("No se pudo encontrar un runner para ejecutar la configuración.", "Error");
                 }
             } else {
-                Messages.showErrorDialog("La configuración seleccionada no es una configuración de aplicación Java.", "Error");
+                Messages.showErrorDialog("La configuración seleccionada no es una configuración de prueba JUnit.", "Error");
             }
         } else {
             Messages.showErrorDialog("No hay una configuración de ejecución seleccionada.", "Error");
