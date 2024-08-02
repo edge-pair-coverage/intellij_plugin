@@ -5,10 +5,10 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Edgepaircoverageplugin</name>
+    <name>Edge-Pair Coverage</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="juancatalan2001@gmail.com" url="https://www.yourcompany.com">Juan Catalán</vendor>
+    <vendor email="juancatalan2001@gmail.com" url="https://github.com/juan-catalan">Juan Catalán</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
@@ -26,13 +26,13 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <iconMapper mappingFile="EdgePairCoverageIconMappings.json"></iconMapper>
     </extensions>
 
     <actions>
-        <action id="com.example.myplugin.MyPluginAction" icon="AllIcons.General.RunWithCoverage" class="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" text="Run with EdgePair Coverage">
-            <add-to-group group-id="RunMenu" anchor="last"/>
-            <add-to-group group-id="RunnerActions" anchor="last"></add-to-group>
+        <action id="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" icon="/icons/runWithCoverage.svg" class="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" text="Run with EdgePair Coverage">
+            <add-to-group group-id="RunMenu" anchor="first"/>
+            <add-to-group group-id="RunnerActions" anchor="first"></add-to-group>
         </action>
     </actions>
 </idea-plugin>

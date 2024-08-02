@@ -1,0 +1,7 @@
+{
+  "expui": {
+      "icons": {
+        "runWithCoverage.svg": "icons/runWithCoverage.svg"
+      }
+  }
+}
