@@ -30,9 +30,9 @@
     </extensions>
 
     <actions>
-        <action id="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" icon="/icons/runWithCoverage.svg" class="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" text="Run with EdgePair Coverage">
-            <add-to-group group-id="RunMenu" anchor="first"/>
-            <add-to-group group-id="RunnerActions" anchor="first"></add-to-group>
+        <action id="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" icon="/icons/runWithCoverage.svg" class="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" text="Run '$' with Edge-Pair Coverage">
+<!--            <add-to-group group-id="RunMenu" anchor="last"/>-->
+            <add-to-group group-id="RunnerActions" anchor="after" relative-to-action="Stop"/>
         </action>
     </actions>
 </idea-plugin>

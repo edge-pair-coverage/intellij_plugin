@@ -23,6 +23,29 @@ import java.util.List;
 
 public class RunWithEdgePairCoverageAction extends AnAction {
     @Override
+    public void update(@NotNull AnActionEvent e){
+        Project project = e.getProject();
+        if (project == null) {
+            e.getPresentation().setEnabledAndVisible(false);
+            return;
+        }
+
+        RunManager runManager = RunManager.getInstance(project);
+        RunnerAndConfigurationSettings settings = runManager.getSelectedConfiguration();
+
+        if (settings != null) {
+            RunConfiguration configuration = settings.getConfiguration();
+            // Aquí configuramos el texto de la acción con el nombre de la configuración
+            String originalText = e.getPresentation().getText();
+            e.getPresentation().setText(originalText.replaceAll("\\$", configuration.getName()));
+            e.getPresentation().setEnabledAndVisible(true);
+        } else {
+            e.getPresentation().setEnabledAndVisible(false);
+        }
+
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getProject();
         if (project != null) {
