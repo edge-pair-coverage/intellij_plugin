@@ -71,7 +71,7 @@ public class RunWithEdgePairCoverageAction extends AnAction {
             // Verificar si la configuración permite modificar VM options
             if (configuration instanceof RunProfile) {
                 String currentVmOptions = getVmOptions(configuration);
-                String javaAgentParameter = "-javaagent:/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT-all.jar"; // Ruta al agente
+                String javaAgentParameter = "-javaagent:/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT.jar"; // Ruta al agente
 
                 if (currentVmOptions == null || !currentVmOptions.contains(javaAgentParameter)) {
                     setVmOptions(configuration, (currentVmOptions != null ? currentVmOptions + " " : "") + javaAgentParameter);
