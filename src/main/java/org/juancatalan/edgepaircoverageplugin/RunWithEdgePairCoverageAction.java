@@ -18,8 +18,10 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.execution.configuration.RunConfigurationExtensionBase;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RunWithEdgePairCoverageAction extends AnAction {
     @Override
@@ -71,6 +73,10 @@ public class RunWithEdgePairCoverageAction extends AnAction {
             // Verificar si la configuración permite modificar VM options
             if (configuration instanceof RunProfile) {
                 String currentVmOptions = getVmOptions(configuration);
+                // Obtener el Path del agente
+                URL resourceAgente = getClass().getClassLoader().getResource("EdgePairCoverageIconMappings.json");
+                String pathAgente = Objects.requireNonNull(resourceAgente).getPath();
+
                 String javaAgentParameter = "-javaagent:/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT.jar"; // Ruta al agente
 
                 if (currentVmOptions == null || !currentVmOptions.contains(javaAgentParameter)) {
@@ -92,7 +98,7 @@ public class RunWithEdgePairCoverageAction extends AnAction {
                 if (runner != null) {
                     try {
                         runner.execute(environment);
-                        Messages.showInfoMessage("Ejecución iniciada con -javaagent", "Información");
+                        //Messages.showInfoMessage("Ejecución iniciada con -javaagent", "Información");
                     } catch (Exception ex) {
                         Messages.showErrorDialog("Error al iniciar la ejecución: " + ex.getMessage(), "Error");
                     }

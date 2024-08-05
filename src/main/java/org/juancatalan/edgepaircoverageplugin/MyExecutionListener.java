@@ -12,6 +12,8 @@ import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,13 +35,13 @@ public class MyExecutionListener implements ExecutionListener {
 
             // Ejecutar la lógica de IU en el EDT
             ApplicationManager.getApplication().invokeLater(() -> {
-                Messages.showInfoMessage(project, "Ejecución terminada para: " + runConfiguration.getName(), "Información");
+                //Messages.showInfoMessage(project, "Ejecución terminada para: " + runConfiguration.getName(), "Información");
                 ejecutarAccionPostEjecucion(runConfiguration, exitCode);
             });
         } else {
             // Ejecutar la lógica de IU en el EDT
             ApplicationManager.getApplication().invokeLater(() -> {
-                Messages.showInfoMessage(project, "Ejecución terminada para perfil no específico: " + runProfile.getName(), "Información");
+                // Messages.showInfoMessage(project, "Ejecución terminada para perfil no específico: " + runProfile.getName(), "Información");
             });
         }
         MyExecutionListener.unregisterListener();
@@ -48,9 +50,19 @@ public class MyExecutionListener implements ExecutionListener {
     private void ejecutarAccionPostEjecucion(com.intellij.execution.configurations.RunConfiguration runConfiguration, int exitCode) {
         // Esta lógica también se ejecuta en el EDT
         if (exitCode == 0) {
-            Messages.showInfoMessage(project, "La ejecución fue exitosa para: " + runConfiguration.getName(), "Resultado de Ejecución");
+            // Messages.showInfoMessage(project, "La ejecución fue exitosa para: " + runConfiguration.getName(), "Resultado de Ejecución");
         } else {
-            Messages.showErrorDialog(project, "La ejecución falló para: " + runConfiguration.getName() + " con código de salida: " + exitCode, "Resultado de Ejecución");
+            // Messages.showErrorDialog(project, "La ejecución falló para: " + runConfiguration.getName() + " con código de salida: " + exitCode, "Resultado de Ejecución");
+        }
+        openToolWindow(project);
+    }
+
+    private void openToolWindow(Project project) {
+        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Edge Pair Coverage Report");
+        if (toolWindow != null) {
+            toolWindow.show();
+        } else {
+            System.out.println("ToolWindow no encontrado");
         }
     }
 

@@ -27,6 +27,10 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <iconMapper mappingFile="EdgePairCoverageIconMappings.json"></iconMapper>
+        <toolWindow id="Edge Pair Coverage Report"
+                    factoryClass="org.juancatalan.edgepaircoverageplugin.MyToolWindowFactory"
+                    anchor="right"
+                    icon="/icons/coverageReport.svg"/>
     </extensions>
 
     <actions>

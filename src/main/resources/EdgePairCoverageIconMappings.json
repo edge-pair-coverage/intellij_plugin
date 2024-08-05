@@ -1,7 +1,8 @@
 {
   "expui": {
       "icons": {
-        "runWithCoverage.svg": "icons/runWithCoverage.svg"
+        "runWithCoverage.svg": "icons/runWithCoverage.svg",
+        "coverageReport.svg": "icons/coverageReport.svg"
       }
   }
 }
