@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,6 +56,9 @@ public class RunWithEdgePairCoverageAction extends AnAction {
             // Mostrar diálogo para selección de métodos
             MetodoSelectorDialog dialog = new MetodoSelectorDialog(project);
             if (dialog.showAndGet()) {
+                for (String metodos: dialog.getSelectedMethods()){
+                    System.out.println(metodos);
+                }
                 // Obtener métodos seleccionados y ejecutar con -javaagent
                 ejecutarConJavaAgent(project, dialog.getSelectedMethods());
             }

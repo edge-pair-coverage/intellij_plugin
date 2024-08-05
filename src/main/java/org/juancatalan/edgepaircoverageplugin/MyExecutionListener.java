@@ -30,8 +30,8 @@ public class MyExecutionListener implements ExecutionListener {
     public void processTerminated(@NotNull String executorId, @NotNull ExecutionEnvironment environment, @NotNull ProcessHandler handler, int exitCode) {
         var runProfile = environment.getRunProfile();
 
-        if (runProfile instanceof com.intellij.execution.configurations.RunConfiguration) {
-            com.intellij.execution.configurations.RunConfiguration runConfiguration = (com.intellij.execution.configurations.RunConfiguration) runProfile;
+        if (runProfile instanceof RunConfiguration) {
+            RunConfiguration runConfiguration = (RunConfiguration) runProfile;
 
             // Ejecutar la lógica de IU en el EDT
             ApplicationManager.getApplication().invokeLater(() -> {
