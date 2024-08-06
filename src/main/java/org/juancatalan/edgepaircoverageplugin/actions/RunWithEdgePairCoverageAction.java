@@ -14,6 +14,7 @@ import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.NotNull;
 import org.juancatalan.edgepaircoverageplugin.MyExecutionListener;
 import org.juancatalan.edgepaircoverageplugin.dialogs.MetodoSelectorDialog;
+import org.juancatalan.edgepaircoverageplugin.dialogs.WizardDialog;
 
 import java.net.URL;
 import java.util.List;
@@ -49,7 +50,8 @@ public class RunWithEdgePairCoverageAction extends AnAction {
         if (project != null) {
             MyExecutionListener.registerListener(project);
             // Mostrar diálogo para selección de métodos
-            MetodoSelectorDialog dialog = new MetodoSelectorDialog(project);
+            WizardDialog dialog = new WizardDialog(project);
+            //MetodoSelectorDialog dialog = new MetodoSelectorDialog(project);
             if (dialog.showAndGet()) {
                 for (String metodos: dialog.getSelectedMethods()){
                     System.out.println(metodos);

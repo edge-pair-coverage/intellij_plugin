@@ -1,0 +1,189 @@
+package org.juancatalan.edgepaircoverageplugin.dialogs;
+
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.fileTypes.FileTypeManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.ui.CheckboxTree;
+import com.intellij.ui.CheckedTreeNode;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.components.JBScrollPane;
+import com.intellij.util.ui.tree.TreeUtil;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultTreeModel;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class MetodoSelectorPanel extends JPanel {
+
+    private final Project project;
+    private final List<PsiMethod> selectedMethods = new ArrayList<>();
+    private final CheckboxTree methodTree;
+
+    public MetodoSelectorPanel(@Nullable Project project) {
+        this.project = project;
+        setLayout(new BorderLayout());
+
+        // Crea el árbol de métodos
+        CheckedTreeNode rootNode = new CheckedTreeNode("Métodos");
+        methodTree = new CheckboxTree(new CheckboxTree.CheckboxTreeCellRenderer() {
+            @Override
+            public void customizeRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+                if (value instanceof CheckedTreeNode) {
+                    CheckedTreeNode node = (CheckedTreeNode) value;
+                    Object userObject = node.getUserObject();
+                    if (userObject instanceof PsiMethod) {
+                        PsiMethod method = (PsiMethod) userObject;
+                        String methodName = method.getName();
+                        String parameters = Stream.of(method.getParameterList().getParameters())
+                                .map(param -> param.getType().getPresentableText() + " " + param.getName())
+                                .collect(Collectors.joining(", "));
+                        getTextRenderer().append(methodName + "(" + parameters + ")", SimpleTextAttributes.REGULAR_ATTRIBUTES);
+                        getTextRenderer().setIcon(AllIcons.Nodes.Method);
+
+                    } else if (userObject instanceof PsiClass) {
+                        PsiClass psiClass = (PsiClass) userObject;
+                        getTextRenderer().append(psiClass.getQualifiedName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
+                        getTextRenderer().setIcon(AllIcons.Nodes.Class);
+                    }
+                }
+            }
+        }, rootNode);
+
+        populateMethods(rootNode, project);
+
+        methodTree.setModel(new DefaultTreeModel(rootNode));
+        uncheckAllNodes(rootNode);
+        TreeUtil.expandAll(methodTree);
+
+        add(new JBScrollPane(methodTree), BorderLayout.CENTER);
+    }
+
+    private void uncheckAllNodes(CheckedTreeNode node) {
+        node.setChecked(false);
+        Enumeration<?> children = node.children();
+        while (children.hasMoreElements()) {
+            Object child = children.nextElement();
+            if (child instanceof CheckedTreeNode) {
+                uncheckAllNodes((CheckedTreeNode) child);
+            }
+        }
+    }
+
+    public static void populateMethods(CheckedTreeNode rootNode, Project project) {
+        FileType javaFileType = FileTypeManager.getInstance().getFileTypeByExtension("java");
+        Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(javaFileType, GlobalSearchScope.projectScope(project));
+
+        for (VirtualFile virtualFile : virtualFiles) {
+            PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
+
+            if (psiFile instanceof PsiJavaFile) {
+                psiFile.accept(new PsiRecursiveElementWalkingVisitor() {
+                    @Override
+                    public void visitElement(PsiElement element) {
+                        super.visitElement(element);
+
+                        if (element instanceof PsiClass) {
+                            PsiClass psiClass = (PsiClass) element;
+
+                            CheckedTreeNode classNode = new CheckedTreeNode(psiClass);
+
+                            for (PsiMethod method : psiClass.getMethods()) {
+                                CheckedTreeNode methodNode = new CheckedTreeNode(method);
+                                classNode.add(methodNode);
+                            }
+
+                            if (classNode.getChildCount() > 0) {
+                                rootNode.add(classNode);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    private static String getFullMethodName(PsiMethod method) {
+        PsiClass containingClass = method.getContainingClass();
+        if (containingClass == null) {
+            return method.getName(); // Fallback
+        }
+
+        String className = containingClass.getQualifiedName();
+        if (className == null) {
+            return method.getName(); // Fallback
+        }
+
+        StringBuilder parameterTypes = new StringBuilder();
+        for (PsiParameter parameter : method.getParameterList().getParameters()) {
+            parameterTypes.append(getTypeDescriptor(parameter.getType()));
+        }
+
+        String returnTypeDescriptor = getTypeDescriptor(method.getReturnType());
+
+        return className.replace('.', '/') + "." + method.getName() + ".(" + parameterTypes + ")" + returnTypeDescriptor;
+    }
+
+    private static String getTypeDescriptor(PsiType type) {
+        if (type == null) {
+            return "V"; // Void descriptor
+        }
+
+        if (type instanceof PsiArrayType) {
+            return "[" + getTypeDescriptor(((PsiArrayType) type).getComponentType());
+        }
+
+        if (type instanceof PsiPrimitiveType) {
+            switch (type.getCanonicalText()) {
+                case "int": return "I";
+                case "boolean": return "Z";
+                case "byte": return "B";
+                case "char": return "C";
+                case "short": return "S";
+                case "double": return "D";
+                case "float": return "F";
+                case "long": return "J";
+                case "void": return "V";
+                default: throw new IllegalArgumentException("Unknown primitive type: " + type.getCanonicalText());
+            }
+        }
+
+        PsiClass resolvedClass = PsiUtil.resolveClassInType(type);
+        if (resolvedClass != null) {
+            return "L" + resolvedClass.getQualifiedName().replace('.', '/') + ";";
+        }
+
+        return "L" + type.getCanonicalText().replace('.', '/') + ";";
+    }
+
+    public List<PsiMethod> getSelectedMethodsList() {
+        List<PsiMethod> methods = new ArrayList<>();
+        CheckedTreeNode root = (CheckedTreeNode) methodTree.getModel().getRoot();
+        collectSelectedMethods(root, methods);
+        return methods;
+    }
+
+    private void collectSelectedMethods(CheckedTreeNode node, List<PsiMethod> methods) {
+        if (node.isChecked() && node.getUserObject() instanceof PsiMethod) {
+            methods.add((PsiMethod) node.getUserObject());
+        }
+        for (int i = 0; i < node.getChildCount(); i++) {
+            CheckedTreeNode childNode = (CheckedTreeNode) node.getChildAt(i);
+            collectSelectedMethods(childNode, methods);
+        }
+    }
+}
+
+
