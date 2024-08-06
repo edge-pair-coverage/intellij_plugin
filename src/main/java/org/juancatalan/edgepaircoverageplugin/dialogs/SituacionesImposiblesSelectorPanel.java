@@ -5,7 +5,9 @@ import com.intellij.psi.PsiMethod;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,6 +66,7 @@ public class SituacionesImposiblesSelectorPanel extends JPanel {
             spinner.setAlignmentX(Component.RIGHT_ALIGNMENT);
             rowPanel.add(Box.createHorizontalGlue());
             rowPanel.add(spinner);
+            spinners.add(spinner);
 
             add(rowPanel);
         }
@@ -72,7 +75,16 @@ public class SituacionesImposiblesSelectorPanel extends JPanel {
         repaint();
     }
 
-    public List<Integer> getSelectedNumbers() {
+    public Map<PsiMethod, Integer> getMetodosSeleccionadosConSituacionesImposibles() {
+        Map<PsiMethod, Integer> map = new HashMap<>();
+        List<Integer> selectedNumbers = this.getSelectedNumbers();
+        for (int i = 0; i < methods.size(); i++) {
+            map.put(methods.get(i), selectedNumbers.get(i));
+        }
+        return map;
+    }
+
+    private List<Integer> getSelectedNumbers() {
         List<Integer> selectedNumbers = new ArrayList<>();
         for (JSpinner spinner : spinners) {
             selectedNumbers.add((Integer) spinner.getValue());

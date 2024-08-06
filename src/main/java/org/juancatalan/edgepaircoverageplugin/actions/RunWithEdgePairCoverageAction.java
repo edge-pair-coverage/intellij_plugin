@@ -11,13 +11,14 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 import org.juancatalan.edgepaircoverageplugin.MyExecutionListener;
-import org.juancatalan.edgepaircoverageplugin.dialogs.MetodoSelectorDialog;
-import org.juancatalan.edgepaircoverageplugin.dialogs.WizardDialog;
+import org.juancatalan.edgepaircoverageplugin.dialogs.SeleccionarMetodosWizardDialog;
+import org.juancatalan.edgepaircoverageplugin.utils.PsiMethodToFullMethodName;
 
 import java.net.URL;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class RunWithEdgePairCoverageAction extends AnAction {
@@ -50,19 +51,19 @@ public class RunWithEdgePairCoverageAction extends AnAction {
         if (project != null) {
             MyExecutionListener.registerListener(project);
             // Mostrar diálogo para selección de métodos
-            WizardDialog dialog = new WizardDialog(project);
+            SeleccionarMetodosWizardDialog dialog = new SeleccionarMetodosWizardDialog(project);
             //MetodoSelectorDialog dialog = new MetodoSelectorDialog(project);
             if (dialog.showAndGet()) {
-                for (String metodos: dialog.getSelectedMethods()){
-                    System.out.println(metodos);
-                }
+                System.out.println(dialog.methodsSituacionesImposiblesMap());
+                System.out.println(dialog.methodsSituacionesImposiblesMap().keySet().stream()
+                        .map(m -> PsiMethodToFullMethodName.transform(m)).toList());
                 // Obtener métodos seleccionados y ejecutar con -javaagent
-                ejecutarConJavaAgent(project, dialog.getSelectedMethods());
+                ejecutarConJavaAgent(project, dialog.methodsSituacionesImposiblesMap());
             }
         }
     }
 
-    private void ejecutarConJavaAgent(Project project, List<String> metodosSeleccionados) {
+    private void ejecutarConJavaAgent(Project project, Map<PsiMethod, Integer> metodosSeleccionados) {
         // Obtener la configuración de ejecución actual
         RunManager runManager = RunManager.getInstance(project);
         RunnerAndConfigurationSettings currentSettings = runManager.getSelectedConfiguration();

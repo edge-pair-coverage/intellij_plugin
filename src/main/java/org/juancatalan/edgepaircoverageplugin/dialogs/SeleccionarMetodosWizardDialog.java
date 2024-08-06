@@ -3,19 +3,13 @@ package org.juancatalan.edgepaircoverageplugin.dialogs;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiMethod;
-import com.intellij.ui.CheckedTreeNode;
-import com.intellij.ui.CheckboxTree;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.util.ui.tree.TreeUtil;
 import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.List;
 
-public class WizardDialog extends DialogWrapper {
+public class SeleccionarMetodosWizardDialog extends DialogWrapper {
     private final String TITLE_METODO_SELECTOR_PANEL = "Selecciona los métodos a medir la cobertura";
     private final String TITLE_SITUACIONES_IMPOSIBLES_SELECTOR_PANEL = "Indique el número de situaciones imposibles por método";
     private final Project project;
@@ -30,7 +24,7 @@ public class WizardDialog extends DialogWrapper {
 
     private JPanel currentPanel;
 
-    public WizardDialog(@Nullable Project project) {
+    public SeleccionarMetodosWizardDialog(@Nullable Project project) {
         super(true); // use current window as parent
         this.project = project;
 
@@ -99,12 +93,8 @@ public class WizardDialog extends DialogWrapper {
         return panel;
     }
 
-    public List<String> getSelectedMethods() {
-        return metodoSelectorPanel.getSelectedMethodsList().stream().map(e -> e.getName()).toList();
-    }
-
-    public List<Integer> getSelectedNumbers() {
-        return situacionesImposiblesSelectorPanel.getSelectedNumbers();
+    public Map<PsiMethod, Integer> methodsSituacionesImposiblesMap(){
+        return situacionesImposiblesSelectorPanel.getMetodosSeleccionadosConSituacionesImposibles();
     }
 }
 

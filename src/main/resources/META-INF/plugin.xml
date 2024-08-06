@@ -28,7 +28,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <iconMapper mappingFile="EdgePairCoverageIconMappings.json"></iconMapper>
         <toolWindow id="Edge Pair Coverage Report"
-                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.MyToolWindowFactory"
+                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory"
                     anchor="right"
                     icon="/icons/coverageReport.svg"/>
     </extensions>

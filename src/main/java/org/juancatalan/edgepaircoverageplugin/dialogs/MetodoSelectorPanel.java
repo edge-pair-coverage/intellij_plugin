@@ -132,59 +132,6 @@ public class MetodoSelectorPanel extends JPanel {
         return false;
     }
 
-    private static String getFullMethodName(PsiMethod method) {
-        PsiClass containingClass = method.getContainingClass();
-        if (containingClass == null) {
-            return method.getName(); // Fallback
-        }
-
-        String className = containingClass.getQualifiedName();
-        if (className == null) {
-            return method.getName(); // Fallback
-        }
-
-        StringBuilder parameterTypes = new StringBuilder();
-        for (PsiParameter parameter : method.getParameterList().getParameters()) {
-            parameterTypes.append(getTypeDescriptor(parameter.getType()));
-        }
-
-        String returnTypeDescriptor = getTypeDescriptor(method.getReturnType());
-
-        return className.replace('.', '/') + "." + method.getName() + ".(" + parameterTypes + ")" + returnTypeDescriptor;
-    }
-
-    private static String getTypeDescriptor(PsiType type) {
-        if (type == null) {
-            return "V"; // Void descriptor
-        }
-
-        if (type instanceof PsiArrayType) {
-            return "[" + getTypeDescriptor(((PsiArrayType) type).getComponentType());
-        }
-
-        if (type instanceof PsiPrimitiveType) {
-            switch (type.getCanonicalText()) {
-                case "int": return "I";
-                case "boolean": return "Z";
-                case "byte": return "B";
-                case "char": return "C";
-                case "short": return "S";
-                case "double": return "D";
-                case "float": return "F";
-                case "long": return "J";
-                case "void": return "V";
-                default: throw new IllegalArgumentException("Unknown primitive type: " + type.getCanonicalText());
-            }
-        }
-
-        PsiClass resolvedClass = PsiUtil.resolveClassInType(type);
-        if (resolvedClass != null) {
-            return "L" + resolvedClass.getQualifiedName().replace('.', '/') + ";";
-        }
-
-        return "L" + type.getCanonicalText().replace('.', '/') + ";";
-    }
-
     public List<PsiMethod> getSelectedMethodsList() {
         List<PsiMethod> methods = new ArrayList<>();
         CheckedTreeNode root = (CheckedTreeNode) methodTree.getModel().getRoot();

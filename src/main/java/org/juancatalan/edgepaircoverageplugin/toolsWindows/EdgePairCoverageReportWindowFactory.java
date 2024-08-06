@@ -8,15 +8,15 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class MyToolWindowFactory implements ToolWindowFactory, DumbAware {
+public class EdgePairCoverageReportWindowFactory implements ToolWindowFactory, DumbAware {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         // Inicializa el contenido del ToolWindow
-        MyToolWindow myToolWindow = new MyToolWindow(project, toolWindow);
+        EdgePairCoverageReportWindow edgePairCoverageReportWindow = new EdgePairCoverageReportWindow(project, toolWindow);
 
         // Usa el nuevo método para obtener ContentFactory
         ContentFactory contentFactory = ContentFactory.getInstance();
-        Content content = contentFactory.createContent(myToolWindow.getContent(), "", false);
+        Content content = contentFactory.createContent(edgePairCoverageReportWindow.getContent(), "", false);
 
         toolWindow.getContentManager().addContent(content);
     }

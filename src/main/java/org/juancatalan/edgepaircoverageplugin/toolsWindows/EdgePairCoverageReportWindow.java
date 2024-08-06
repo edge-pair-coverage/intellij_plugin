@@ -6,11 +6,11 @@ import com.intellij.openapi.wm.ToolWindow;
 import javax.swing.*;
 import java.awt.*;
 
-public class MyToolWindow {
+public class EdgePairCoverageReportWindow {
     private JPanel contentPanel;
     private final JBCefBrowser browser;
 
-    public MyToolWindow(Project project, ToolWindow toolWindow) {
+    public EdgePairCoverageReportWindow(Project project, ToolWindow toolWindow) {
         // Obtén el directorio base del proyecto
         String basePath = project.getBasePath();
         if (basePath == null) {
