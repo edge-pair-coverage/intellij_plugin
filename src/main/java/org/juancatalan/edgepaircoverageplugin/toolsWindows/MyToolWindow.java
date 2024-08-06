@@ -1,8 +1,7 @@
-package org.juancatalan.edgepaircoverageplugin;
+package org.juancatalan.edgepaircoverageplugin.toolsWindows;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.jcef.JBCefBrowser;
-import com.intellij.ui.jcef.JBCefApp;
 import com.intellij.openapi.wm.ToolWindow;
 import javax.swing.*;
 import java.awt.*;

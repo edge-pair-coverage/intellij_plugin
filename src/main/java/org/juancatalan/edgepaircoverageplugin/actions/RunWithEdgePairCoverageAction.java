@@ -1,26 +1,21 @@
-package org.juancatalan.edgepaircoverageplugin;
+package org.juancatalan.edgepaircoverageplugin.actions;
 
 import com.intellij.execution.*;
-import com.intellij.execution.application.ApplicationConfiguration;
-import com.intellij.execution.JavaRunConfigurationBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
 import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.execution.configuration.RunConfigurationExtensionBase;
 import org.jetbrains.annotations.NotNull;
+import org.juancatalan.edgepaircoverageplugin.MyExecutionListener;
+import org.juancatalan.edgepaircoverageplugin.dialogs.MetodoSelectorDialog;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 

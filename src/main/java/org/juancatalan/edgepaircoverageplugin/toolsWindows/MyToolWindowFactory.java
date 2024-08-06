@@ -1,4 +1,4 @@
-package org.juancatalan.edgepaircoverageplugin;
+package org.juancatalan.edgepaircoverageplugin.toolsWindows;
 
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;

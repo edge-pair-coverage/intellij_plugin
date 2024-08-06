@@ -1,5 +1,6 @@
-package org.juancatalan.edgepaircoverageplugin;
+package org.juancatalan.edgepaircoverageplugin.dialogs;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
@@ -11,6 +12,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.ui.CheckboxTree;
 import com.intellij.ui.CheckedTreeNode;
+import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.tree.TreeUtil;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +21,10 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MetodoSelectorDialog extends DialogWrapper {
 
@@ -42,10 +47,16 @@ public class MetodoSelectorDialog extends DialogWrapper {
                     Object userObject = node.getUserObject();
                     if (userObject instanceof PsiMethod) {
                         PsiMethod method = (PsiMethod) userObject;
-                        getTextRenderer().append(method.getName());
+                        String methodName = method.getName();
+                        String parameters = Stream.of(method.getParameterList().getParameters())
+                                .map(param -> param.getType().getPresentableText() + " " + param.getName())
+                                .collect(Collectors.joining(", "));
+                        getTextRenderer().append(methodName + "(" + parameters + ")", SimpleTextAttributes.REGULAR_ATTRIBUTES);
+                        getTextRenderer().setIcon(AllIcons.Nodes.Method);
                     } else if (userObject instanceof PsiClass) {
                         PsiClass psiClass = (PsiClass) userObject;
-                        getTextRenderer().append(psiClass.getQualifiedName());
+                        getTextRenderer().append(psiClass.getQualifiedName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
+                        getTextRenderer().setIcon(AllIcons.Nodes.Class);
                     }
                 }
             }
@@ -54,8 +65,20 @@ public class MetodoSelectorDialog extends DialogWrapper {
         populateMethods(rootNode, project);
 
         methodTree.setModel(new DefaultTreeModel(rootNode));
+        uncheckAllNodes(rootNode);
         TreeUtil.expandAll(methodTree);
         init();
+    }
+
+    private void uncheckAllNodes(CheckedTreeNode node) {
+        node.setChecked(false);
+        Enumeration children = node.children();
+        while (children.hasMoreElements()) {
+            Object child = children.nextElement();
+            if (child instanceof CheckedTreeNode) {
+                uncheckAllNodes((CheckedTreeNode) child);
+            }
+        }
     }
 
     public static void populateMethods(CheckedTreeNode rootNode, Project project) {
@@ -171,6 +194,20 @@ public class MetodoSelectorDialog extends DialogWrapper {
         selectedMethods.clear();
         CheckedTreeNode root = (CheckedTreeNode) methodTree.getModel().getRoot();
         collectSelectedMethods(root);
+        if (!selectedMethods.isEmpty()) {
+            SituacionesImposiblesSelectorDialog situacionesImposiblesSelectorDialog = new SituacionesImposiblesSelectorDialog(selectedMethods);
+            if (situacionesImposiblesSelectorDialog.showAndGet()) {
+                List<Integer> selectedNumbers = situacionesImposiblesSelectorDialog.getSelectedNumbers();
+                // Aquí puedes manejar los números seleccionados por el usuario
+                System.out.println("Números seleccionados para cada método:");
+                for (int i = 0; i < selectedMethods.size(); i++) {
+                    System.out.println(selectedMethods.get(i).getName() + ": " + selectedNumbers.get(i));
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay métodos seleccionados.");
+        }
+
         super.doOKAction();
     }
 

@@ -28,13 +28,13 @@
     <extensions defaultExtensionNs="com.intellij">
         <iconMapper mappingFile="EdgePairCoverageIconMappings.json"></iconMapper>
         <toolWindow id="Edge Pair Coverage Report"
-                    factoryClass="org.juancatalan.edgepaircoverageplugin.MyToolWindowFactory"
+                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.MyToolWindowFactory"
                     anchor="right"
                     icon="/icons/coverageReport.svg"/>
     </extensions>
 
     <actions>
-        <action id="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" icon="/icons/runWithCoverage.svg" class="org.juancatalan.edgepaircoverageplugin.RunWithEdgePairCoverageAction" text="Run '$' with Edge-Pair Coverage">
+        <action id="org.juancatalan.edgepaircoverageplugin.actions.RunWithEdgePairCoverageAction" icon="/icons/runWithCoverage.svg" class="org.juancatalan.edgepaircoverageplugin.actions.RunWithEdgePairCoverageAction" text="Run '$' with Edge-Pair Coverage">
 <!--            <add-to-group group-id="RunMenu" anchor="last"/>-->
             <add-to-group group-id="RunnerActions" anchor="after" relative-to-action="Stop"/>
         </action>
