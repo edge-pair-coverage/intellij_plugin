@@ -87,6 +87,11 @@ public class MetodoSelectorPanel extends JPanel {
         Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(javaFileType, GlobalSearchScope.projectScope(project));
 
         for (VirtualFile virtualFile : virtualFiles) {
+            // Verificar si el archivo está en un directorio de prueba
+            if (isInTestDirectory(virtualFile)) {
+                continue; // Si está en un directorio de prueba, omitir este archivo
+            }
+
             PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
 
             if (psiFile instanceof PsiJavaFile) {
@@ -113,6 +118,18 @@ public class MetodoSelectorPanel extends JPanel {
                 });
             }
         }
+    }
+
+    private static boolean isInTestDirectory(VirtualFile file) {
+        // Obtén el directorio padre del archivo
+        VirtualFile parent = file.getParent();
+
+        // Recorre hacia arriba para encontrar el directorio raíz del proyecto
+        while (parent != null && !parent.getName().equals("src")) {
+            if (parent.getName().equals("test")) return true;
+            parent = parent.getParent();
+        }
+        return false;
     }
 
     private static String getFullMethodName(PsiMethod method) {
