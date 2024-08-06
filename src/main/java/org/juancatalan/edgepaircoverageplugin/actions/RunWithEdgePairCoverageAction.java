@@ -17,6 +17,7 @@ import org.juancatalan.edgepaircoverageplugin.MyExecutionListener;
 import org.juancatalan.edgepaircoverageplugin.dialogs.SeleccionarMetodosWizardDialog;
 import org.juancatalan.edgepaircoverageplugin.utils.PsiMethodToFullMethodName;
 
+import java.io.*;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
@@ -76,10 +77,28 @@ public class RunWithEdgePairCoverageAction extends AnAction {
             if (configuration instanceof RunProfile) {
                 String currentVmOptions = getVmOptions(configuration);
                 // Obtener el Path del agente
-                URL resourceAgente = getClass().getClassLoader().getResource("EdgePairCoverageIconMappings.json");
-                String pathAgente = Objects.requireNonNull(resourceAgente).getPath();
+                InputStream inputStreamAgente = getClass().getClassLoader().getResourceAsStream("agent.jar");
+                // Convierte la URL en un archivo
+                File tempFile = null;
+                try {
+                    tempFile = File.createTempFile("agent", ".jar");
+                    tempFile.deleteOnExit(); // Asegura que el archivo temporal se elimine al salir
+                    // Copia el recurso al archivo temporal
+                    OutputStream out = new FileOutputStream(tempFile);
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStreamAgente.read(buffer)) != -1) {
+                        out.write(buffer, 0, bytesRead);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
-                String javaAgentParameter = "-javaagent:/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT.jar"; // Ruta al agente
+                // Obtén la ruta del archivo temporal
+                String pathAgente = tempFile.getAbsolutePath();
+
+                String javaAgentParameter = "-javaagent:".concat(pathAgente); // Ruta al agente
+                javaAgentParameter = javaAgentParameter.concat("="+metodosSeleccionados.toString());
 
                 if (currentVmOptions == null || !currentVmOptions.contains(javaAgentParameter)) {
                     setVmOptions(configuration, (currentVmOptions != null ? currentVmOptions + " " : "") + javaAgentParameter);
