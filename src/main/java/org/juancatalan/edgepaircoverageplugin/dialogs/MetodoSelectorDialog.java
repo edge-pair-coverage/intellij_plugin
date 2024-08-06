@@ -194,20 +194,6 @@ public class MetodoSelectorDialog extends DialogWrapper {
         selectedMethods.clear();
         CheckedTreeNode root = (CheckedTreeNode) methodTree.getModel().getRoot();
         collectSelectedMethods(root);
-        if (!selectedMethods.isEmpty()) {
-            SituacionesImposiblesSelectorDialog situacionesImposiblesSelectorDialog = new SituacionesImposiblesSelectorDialog(selectedMethods);
-            if (situacionesImposiblesSelectorDialog.showAndGet()) {
-                List<Integer> selectedNumbers = situacionesImposiblesSelectorDialog.getSelectedNumbers();
-                // Aquí puedes manejar los números seleccionados por el usuario
-                System.out.println("Números seleccionados para cada método:");
-                for (int i = 0; i < selectedMethods.size(); i++) {
-                    System.out.println(selectedMethods.get(i).getName() + ": " + selectedNumbers.get(i));
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No hay métodos seleccionados.");
-        }
-
         super.doOKAction();
     }
 
