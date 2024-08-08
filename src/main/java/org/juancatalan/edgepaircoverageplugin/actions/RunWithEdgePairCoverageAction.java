@@ -95,10 +95,14 @@ public class RunWithEdgePairCoverageAction extends AnAction {
                 }
 
                 // Obtén la ruta del archivo temporal
-                String pathAgente = tempFile.getAbsolutePath();
+                //String pathAgente = tempFile.getAbsolutePath();
+                String pathAgente = "/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT.jar"; // Ruta al agente
 
                 String javaAgentParameter = "-javaagent:".concat(pathAgente); // Ruta al agente
-                javaAgentParameter = javaAgentParameter.concat("="+metodosSeleccionados.toString());
+
+                StringBuilder stringBuilder = new StringBuilder();
+                metodosSeleccionados.forEach((k, v) -> stringBuilder.append(PsiMethodToFullMethodName.transform(k)+":"+v+";"));
+                javaAgentParameter = javaAgentParameter.concat("=methods={"+stringBuilder.toString()+"}");
 
                 if (currentVmOptions == null || !currentVmOptions.contains(javaAgentParameter)) {
                     setVmOptions(configuration, (currentVmOptions != null ? currentVmOptions + " " : "") + javaAgentParameter);

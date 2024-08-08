@@ -29,8 +29,10 @@ public class PsiMethodToFullMethodName {
         // Obtener el tipo de retorno
         String returnTypeDescriptor = getTypeDescriptor(method.getReturnType());
 
+        String methodName = (method.isConstructor() ? "<init>" : method.getName());
+
         // Construir el nombre completo del método
-        return className.replace('.', '/') + "." + method.getName() + ".(" + parameterTypes + ")" + returnTypeDescriptor;
+        return className.replace('.', '/') + "." + methodName + ".(" + parameterTypes + ")" + returnTypeDescriptor;
     }
 
     private static String getTypeDescriptor(PsiType type) {
