@@ -1,5 +1,6 @@
 package org.juancatalan.edgepaircoverageplugin.dialogs;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiMethod;
 
 import javax.swing.*;
@@ -57,6 +58,7 @@ public class SituacionesImposiblesSelectorPanel extends JPanel {
             rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
 
             JLabel methodLabel = new JLabel(method.getName() + getMethodParameters(method));
+            methodLabel.setIcon(AllIcons.Nodes.Method);
             methodLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             rowPanel.add(methodLabel);
 
