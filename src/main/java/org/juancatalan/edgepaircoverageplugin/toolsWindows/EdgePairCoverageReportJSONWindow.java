@@ -6,15 +6,17 @@ import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.jcef.JBCefBrowser;
 import org.juancatalan.edgepaircoverageplugin.DTO.MethodReportDTO;
 import org.juancatalan.edgepaircoverageplugin.DTO.parsers.MethodReportJsonParser;
 import org.juancatalan.edgepaircoverageplugin.dialogs.MethodReportPanel;
+import org.juancatalan.edgepaircoverageplugin.dialogs.ReportPanel;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.List;
 
 
 public class EdgePairCoverageReportJSONWindow {
@@ -35,13 +37,27 @@ public class EdgePairCoverageReportJSONWindow {
         String filePath = basePath + "/coverageReport/report.json";
 
         try {
-            List<MethodReportDTO> methodReportDTOList = MethodReportJsonParser.parseJSON(filePath);
-            contentPanel = new JPanel();
-            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+            java.util.List<MethodReportDTO> methodReportDTOList = MethodReportJsonParser.parseJSON(filePath);
+
+            /*
+            if (contentPanel == null) {
+                contentPanel = new JPanel();
+                contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+            }
+
+            // Elimina todos los componentes anteriores
+            contentPanel.removeAll();
 
             for (MethodReportDTO methodReportDTO : methodReportDTOList) {
                 contentPanel.add(new MethodReportPanel(methodReportDTO));
             }
+
+             */
+            contentPanel = new ReportPanel(project, methodReportDTOList);
+
+            // Actualiza la interfaz de usuario
+            contentPanel.revalidate();
+            contentPanel.repaint();
 
             setupFileWatcher(project, filePath);
         } catch (IOException e) {
@@ -63,7 +79,7 @@ public class EdgePairCoverageReportJSONWindow {
             @Override
             public void contentsChanged(VirtualFileEvent event) {
                 if (event.getFile().equals(vf)) {
-                    fillUi(project);
+                    SwingUtilities.invokeLater(() -> fillUi(project));
                 }
             }
         };

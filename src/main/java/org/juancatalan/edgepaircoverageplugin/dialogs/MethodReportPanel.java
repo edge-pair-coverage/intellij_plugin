@@ -26,11 +26,6 @@ public class MethodReportPanel extends JPanel {
 
     private void initializeUI() {
         // Crear un panel de información con un fondo personalizado
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(5, 1, 5, 5));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        infoPanel.setBackground(new Color(230, 240, 255));
-
         // Crear componentes
         JLabel nombreLabel = new JLabel("Nombre: " + methodReportDTO.getNombre());
         nombreLabel.setFont(new Font("Arial", Font.BOLD, 16));
@@ -47,7 +42,6 @@ public class MethodReportPanel extends JPanel {
 
         // Grafo Imagen
         JLabel grafoImagenLabel = new JLabel();
-        grafoImagenLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         // Intenta cargar la imagen desde la URL
         try {
@@ -66,14 +60,13 @@ public class MethodReportPanel extends JPanel {
         }
 
         // Añadir componentes al panel de información
-        infoPanel.add(nombreLabel);
-        infoPanel.add(caminosImposiblesLabel);
-        infoPanel.add(porcentajeCoberturaLabel);
-        infoPanel.add(grafoLabel);
-        infoPanel.add(grafoImagenLabel);
+        this.add(nombreLabel);
+        this.add(caminosImposiblesLabel);
+        this.add(porcentajeCoberturaLabel);
+        this.add(grafoLabel);
+        this.add(grafoImagenLabel);
 
-        // Añadir panel de información al panel principal
-        add(infoPanel);
+
 
         // Crear acordeones para caminos y caminos cubiertos
         JPanel caminosPanel = createAccordionPanel(methodReportDTO.getCaminos(), "Caminos");
