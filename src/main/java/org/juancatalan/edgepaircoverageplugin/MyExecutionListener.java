@@ -16,6 +16,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
+import org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportJSONWindow;
 
 public class MyExecutionListener implements ExecutionListener {
 

@@ -1,6 +1,5 @@
-package org.juancatalan.edgepaircoverageplugin.dialogs;
+package org.juancatalan.edgepaircoverageplugin.ui.panels;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.Nullable;

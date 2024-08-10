@@ -6,12 +6,9 @@ import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.jcef.JBCefBrowser;
 import org.juancatalan.edgepaircoverageplugin.DTO.MethodReportDTO;
 import org.juancatalan.edgepaircoverageplugin.DTO.parsers.MethodReportJsonParser;
-import org.juancatalan.edgepaircoverageplugin.dialogs.MethodReportPanel;
-import org.juancatalan.edgepaircoverageplugin.dialogs.ReportPanel;
+import org.juancatalan.edgepaircoverageplugin.ui.panels.ReportPanel;
 
 import java.util.List;
 import javax.swing.*;
@@ -21,12 +18,24 @@ import java.io.IOException;
 
 public class EdgePairCoverageReportJSONWindow {
     private JPanel contentPanel;
+    private JPanel mainPanel;
 
     public EdgePairCoverageReportJSONWindow(Project project, ToolWindow toolWindow) {
+        mainPanel = new JPanel(new BorderLayout()); // Panel principal con BorderLayout
+
+        // Obtén el directorio base del proyecto
+        String basePath = project.getBasePath();
+        if (basePath == null) {
+            throw new IllegalStateException("El directorio base del proyecto no está disponible.");
+        }
+
+        // Construye la ruta completa al archivo JSON
+        String filePath = basePath + "/coverageReport/report.json";
         fillUi(project);
+        setupFileWatcher(project, filePath);
     }
 
-    private void fillUi(Project project) {
+    public void fillUi(Project project) {
         // Obtén el directorio base del proyecto
         String basePath = project.getBasePath();
         if (basePath == null) {
@@ -37,34 +46,27 @@ public class EdgePairCoverageReportJSONWindow {
         String filePath = basePath + "/coverageReport/report.json";
 
         try {
-            java.util.List<MethodReportDTO> methodReportDTOList = MethodReportJsonParser.parseJSON(filePath);
+            List<MethodReportDTO> methodReportDTOList = MethodReportJsonParser.parseJSON(filePath);
+            System.out.println("Parsed JSON: " + methodReportDTOList);
 
-            /*
-            if (contentPanel == null) {
-                contentPanel = new JPanel();
-                contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+            // Crea un nuevo ReportPanel
+            JPanel newContentPanel = new ReportPanel(project, methodReportDTOList);
+
+            // Remueve el panel viejo y añade el nuevo
+            if (contentPanel != null) {
+                mainPanel.remove(contentPanel);
             }
 
-            // Elimina todos los componentes anteriores
-            contentPanel.removeAll();
-
-            for (MethodReportDTO methodReportDTO : methodReportDTOList) {
-                contentPanel.add(new MethodReportPanel(methodReportDTO));
-            }
-
-             */
-            contentPanel = new ReportPanel(project, methodReportDTOList);
+            contentPanel = newContentPanel;
+            mainPanel.add(contentPanel, BorderLayout.CENTER);
 
             // Actualiza la interfaz de usuario
-            contentPanel.revalidate();
-            contentPanel.repaint();
-
-            setupFileWatcher(project, filePath);
+            mainPanel.revalidate();
+            mainPanel.repaint();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     private void setupFileWatcher(Project project, String filePath) {
         VirtualFileManager vfm = VirtualFileManager.getInstance();
@@ -79,7 +81,12 @@ public class EdgePairCoverageReportJSONWindow {
             @Override
             public void contentsChanged(VirtualFileEvent event) {
                 if (event.getFile().equals(vf)) {
-                    SwingUtilities.invokeLater(() -> fillUi(project));
+                    System.out.println("El archivo ha cambiado: " + event.getFile().getPath());
+
+                    // Asegúrate de refrescar el estado del archivo
+                    VirtualFileManager.getInstance().asyncRefresh(() -> {
+                        SwingUtilities.invokeLater(() -> fillUi(project));
+                    });
                 }
             }
         };
@@ -94,6 +101,6 @@ public class EdgePairCoverageReportJSONWindow {
     }
 
     public JPanel getContent() {
-        return contentPanel;
+        return mainPanel;
     }
 }

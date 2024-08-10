@@ -1,9 +1,12 @@
-package org.juancatalan.edgepaircoverageplugin.dialogs;
+package org.juancatalan.edgepaircoverageplugin.ui.dialogs;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.Nullable;
+import org.juancatalan.edgepaircoverageplugin.ui.panels.SituacionesImposiblesSelectorPanel;
+import org.juancatalan.edgepaircoverageplugin.ui.panels.MetodoSelectorPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;

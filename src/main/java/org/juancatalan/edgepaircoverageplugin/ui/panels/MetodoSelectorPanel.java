@@ -1,4 +1,4 @@
-package org.juancatalan.edgepaircoverageplugin.dialogs;
+package org.juancatalan.edgepaircoverageplugin.ui.panels;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileTypes.FileType;
@@ -8,7 +8,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiUtil;
 import com.intellij.ui.CheckboxTree;
 import com.intellij.ui.CheckedTreeNode;
 import com.intellij.ui.SimpleTextAttributes;

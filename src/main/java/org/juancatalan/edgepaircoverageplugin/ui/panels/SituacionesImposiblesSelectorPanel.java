@@ -1,4 +1,4 @@
-package org.juancatalan.edgepaircoverageplugin.dialogs;
+package org.juancatalan.edgepaircoverageplugin.ui.panels;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiMethod;

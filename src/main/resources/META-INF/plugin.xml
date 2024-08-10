@@ -26,15 +26,22 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceImplementation="org.juancatalan.edgepaircoverageplugin.settings.AppSettings"/>
+        <applicationConfigurable
+                parentId="tools"
+                instance="org.juancatalan.edgepaircoverageplugin.settings.AppSettingsConfigurable"
+                id="org.juancatalan.edgepaircoverageplugin.settings.AppSettingsConfigurable"
+                displayName="Edge-Pair Coverage: Settings"/>
         <iconMapper mappingFile="EdgePairCoverageIconMappings.json"></iconMapper>
-<!--        <toolWindow id="Edge Pair Coverage Report"-->
-<!--                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory"-->
-<!--                    anchor="right"-->
-<!--                    icon="/icons/coverageReport.svg"/>-->
         <toolWindow id="Edge Pair Coverage Report"
-                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportJSONWindowFactory"
+                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory"
                     anchor="right"
                     icon="/icons/coverageReport.svg"/>
+<!--        <toolWindow id="Edge Pair Coverage Report"-->
+<!--                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportJSONWindowFactory"-->
+<!--                    anchor="right"-->
+<!--                    icon="/icons/coverageReport.svg"/>-->
     </extensions>
 
     <actions>
