@@ -32,16 +32,18 @@
                 parentId="tools"
                 instance="org.juancatalan.edgepaircoverageplugin.settings.AppSettingsConfigurable"
                 id="org.juancatalan.edgepaircoverageplugin.settings.AppSettingsConfigurable"
-                displayName="Edge-Pair Coverage: Settings"/>
+                displayName="Edge-Pair Coverage"/>
         <iconMapper mappingFile="EdgePairCoverageIconMappings.json"></iconMapper>
-        <toolWindow id="Edge Pair Coverage Report"
-                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory"
-                    anchor="right"
-                    icon="/icons/coverageReport.svg"/>
 <!--        <toolWindow id="Edge Pair Coverage Report"-->
+<!--                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory"-->
+<!--                    anchor="right"-->
+<!--                    icon="/icons/coverageReport.svg"-->
+<!--        />-->
+<!--        <toolWindow id="Edge Pair Coverage Report "-->
 <!--                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportJSONWindowFactory"-->
 <!--                    anchor="right"-->
-<!--                    icon="/icons/coverageReport.svg"/>-->
+<!--                    icon="/icons/coverageReport.svg"-->
+<!--        />-->
     </extensions>
 
     <actions>

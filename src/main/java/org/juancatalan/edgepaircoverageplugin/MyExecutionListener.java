@@ -12,11 +12,18 @@ import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.IconLoader;
+import com.intellij.openapi.wm.RegisterToolWindowTask;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
+import org.juancatalan.edgepaircoverageplugin.settings.AppSettings;
 import org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportJSONWindow;
+import org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportJSONWindowFactory;
+import org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory;
+
+import javax.swing.*;
 
 public class MyExecutionListener implements ExecutionListener {
 
@@ -55,16 +62,55 @@ public class MyExecutionListener implements ExecutionListener {
         } else {
             // Messages.showErrorDialog(project, "La ejecución falló para: " + runConfiguration.getName() + " con código de salida: " + exitCode, "Resultado de Ejecución");
         }
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+
+        toolWindowManager.invokeLater(() -> {
+            if (toolWindowManager.getToolWindow("Edge Pair Coverage Report") != null){
+                ToolWindow toolWindow = toolWindowManager.getToolWindow("Edge Pair Coverage Report");
+                toolWindow.getContentManager().removeAllContents(true);
+                Icon icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
+                toolWindow.setIcon(icon);
+                AppSettings.State appSettings = AppSettings.getInstance().getState();
+                if (appSettings.reportType.equals(AppSettings.reportType.HTML)){
+                    EdgePairCoverageReportWindowFactory factory = new EdgePairCoverageReportWindowFactory();
+                    factory.createToolWindowContent(project, toolWindow);
+                }
+                else {
+                    EdgePairCoverageReportJSONWindowFactory factory = new EdgePairCoverageReportJSONWindowFactory();
+                    factory.createToolWindowContent(project, toolWindow);
+                }
+            }
+            else {
+                toolWindowManager.registerToolWindow(RegisterToolWindowTask.notClosable("Edge Pair Coverage Report"));
+                ToolWindow toolWindow = toolWindowManager.getToolWindow("Edge Pair Coverage Report");
+                Icon icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
+                toolWindow.setIcon(icon);
+                AppSettings.State appSettings = AppSettings.getInstance().getState();
+                if (appSettings.reportType.equals(AppSettings.reportType.HTML)){
+                    EdgePairCoverageReportWindowFactory factory = new EdgePairCoverageReportWindowFactory();
+                    factory.createToolWindowContent(project, toolWindow);
+                }
+                else {
+                    EdgePairCoverageReportJSONWindowFactory factory = new EdgePairCoverageReportJSONWindowFactory();
+                    factory.createToolWindowContent(project, toolWindow);
+                }
+            }
+
+        });
         openToolWindow(project);
     }
 
     private void openToolWindow(Project project) {
-        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Edge Pair Coverage Report");
-        if (toolWindow != null) {
-            toolWindow.show();
-        } else {
-            System.out.println("ToolWindow no encontrado");
-        }
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+
+        toolWindowManager.invokeLater(() -> {
+            ToolWindow toolWindow = toolWindowManager.getToolWindow("Edge Pair Coverage Report");
+            if (toolWindow != null) {
+                toolWindow.show();
+            } else {
+                System.out.println("ToolWindow no encontrado");
+            }
+        });
     }
 
     // Método para registrar el listener en el proyecto

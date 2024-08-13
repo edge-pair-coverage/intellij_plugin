@@ -1,5 +1,7 @@
 package org.juancatalan.edgepaircoverageplugin.DTO;
 
+import java.util.Objects;
+
 public class SituacionPruebaDTO {
     private int nodoInicio;
     private int nodoMedio;
@@ -56,5 +58,17 @@ public class SituacionPruebaDTO {
                 ", aristaInicioMedio='" + aristaInicioMedio + '\'' +
                 ", aristaMedioFinal='" + aristaMedioFinal + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SituacionPruebaDTO that)) return false;
+        return nodoInicio == that.nodoInicio && nodoMedio == that.nodoMedio && nodoFinal == that.nodoFinal && Objects.equals(aristaInicioMedio, that.aristaInicioMedio) && Objects.equals(aristaMedioFinal, that.aristaMedioFinal);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nodoInicio, nodoMedio, nodoFinal, aristaInicioMedio, aristaMedioFinal);
     }
 }

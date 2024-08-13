@@ -15,15 +15,19 @@ import org.jetbrains.annotations.NotNull;
 final public class AppSettings
         implements PersistentStateComponent<AppSettings.State> {
 
+    public enum reportType{
+        HTML, Native
+    }
+
     static public class State {
         @NonNls
-        public String userId = "John Smith";
-        public boolean ideaStatus = false;
+        public reportType reportType = AppSettings.reportType.HTML;
+        public boolean booleanAssignmentsAsPredicateNode = false;
     }
 
     private State myState = new State();
 
-    static AppSettings getInstance() {
+    static public AppSettings getInstance() {
         return ApplicationManager.getApplication()
                 .getService(AppSettings.class);
     }

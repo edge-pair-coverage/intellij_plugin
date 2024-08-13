@@ -12,10 +12,13 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
 import org.juancatalan.edgepaircoverageplugin.MyExecutionListener;
 import org.juancatalan.edgepaircoverageplugin.settings.AppSettings;
+import org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindow;
+import org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory;
 import org.juancatalan.edgepaircoverageplugin.ui.dialogs.SeleccionarMetodosWizardDialog;
 import org.juancatalan.edgepaircoverageplugin.utils.PsiMethodToFullMethodName;
 
@@ -98,13 +101,16 @@ public class RunWithEdgePairCoverageAction extends AnAction {
                 //String pathAgente = tempFile.getAbsolutePath();
                 String pathAgente = "/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT.jar"; // Ruta al agente
 
-                AppSettings.State appSettings = ApplicationManager.getApplication().getService(AppSettings.class).getState();
+                AppSettings.State appSettings = AppSettings.getInstance().getState();
 
                 String javaAgentParameter = "-javaagent:".concat(pathAgente); // Ruta al agente
 
-                StringBuilder stringBuilder = new StringBuilder();
-                metodosSeleccionados.forEach((k, v) -> stringBuilder.append(PsiMethodToFullMethodName.transform(k)+":"+v+";"));
-                javaAgentParameter = javaAgentParameter.concat("=methods={"+stringBuilder.toString()+"}");
+                StringBuilder metodosSeleccionadosStringBuilder = new StringBuilder();
+                metodosSeleccionados.forEach((k, v) -> metodosSeleccionadosStringBuilder.append(PsiMethodToFullMethodName.transform(k)+":"+v+";;"));
+                javaAgentParameter = javaAgentParameter.concat(
+                        "=methods={"+ metodosSeleccionadosStringBuilder +"};"+
+                        "booleanAssignmentPredicateNode={" + appSettings.booleanAssignmentsAsPredicateNode +"};"
+                );
 
                 if (currentVmOptions == null || !currentVmOptions.contains(javaAgentParameter)) {
                     setVmOptions(configuration, (currentVmOptions != null ? currentVmOptions + " " : "") + javaAgentParameter);

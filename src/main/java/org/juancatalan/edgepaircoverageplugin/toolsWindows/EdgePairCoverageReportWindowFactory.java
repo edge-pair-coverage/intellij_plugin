@@ -7,6 +7,7 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
+import org.juancatalan.edgepaircoverageplugin.settings.AppSettings;
 
 public class EdgePairCoverageReportWindowFactory implements ToolWindowFactory, DumbAware {
     @Override

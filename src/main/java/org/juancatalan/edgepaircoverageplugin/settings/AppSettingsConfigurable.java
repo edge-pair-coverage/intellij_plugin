@@ -21,7 +21,7 @@ final class AppSettingsConfigurable implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "SDK: Application Settings Example";
+        return "Edge-Pair Coverage";
     }
 
     @Override
@@ -40,24 +40,24 @@ final class AppSettingsConfigurable implements Configurable {
     public boolean isModified() {
         AppSettings.State state =
                 Objects.requireNonNull(AppSettings.getInstance().getState());
-        return !mySettingsComponent.getUserNameText().equals(state.userId) ||
-                mySettingsComponent.getIdeaUserStatus() != state.ideaStatus;
+        return !mySettingsComponent.getMyReportType().equals(state.reportType) ||
+                mySettingsComponent.getBooleanAssignmentAsPredicateNode() != state.booleanAssignmentsAsPredicateNode;
     }
 
     @Override
     public void apply() {
         AppSettings.State state =
                 Objects.requireNonNull(AppSettings.getInstance().getState());
-        state.userId = mySettingsComponent.getUserNameText();
-        state.ideaStatus = mySettingsComponent.getIdeaUserStatus();
+        state.reportType = mySettingsComponent.getMyReportType();
+        state.booleanAssignmentsAsPredicateNode = mySettingsComponent.getBooleanAssignmentAsPredicateNode();
     }
 
     @Override
     public void reset() {
         AppSettings.State state =
                 Objects.requireNonNull(AppSettings.getInstance().getState());
-        mySettingsComponent.setUserNameText(state.userId);
-        mySettingsComponent.setIdeaUserStatus(state.ideaStatus);
+        mySettingsComponent.setMyReportType(state.reportType);
+        mySettingsComponent.setBooleanAssignmentAsPredicateNode(state.booleanAssignmentsAsPredicateNode);
     }
 
     @Override

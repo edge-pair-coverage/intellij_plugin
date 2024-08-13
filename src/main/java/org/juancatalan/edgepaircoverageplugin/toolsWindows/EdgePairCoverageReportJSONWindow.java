@@ -47,7 +47,6 @@ public class EdgePairCoverageReportJSONWindow {
 
         try {
             List<MethodReportDTO> methodReportDTOList = MethodReportJsonParser.parseJSON(filePath);
-            System.out.println("Parsed JSON: " + methodReportDTOList);
 
             // Crea un nuevo ReportPanel
             JPanel newContentPanel = new ReportPanel(project, methodReportDTOList);

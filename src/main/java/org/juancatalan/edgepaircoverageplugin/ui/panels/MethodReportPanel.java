@@ -2,18 +2,24 @@ package org.juancatalan.edgepaircoverageplugin.ui.panels;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBList;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.UIUtil;
 import org.juancatalan.edgepaircoverageplugin.DTO.MethodReportDTO;
+import org.juancatalan.edgepaircoverageplugin.DTO.SituacionPruebaDTO;
 import org.juancatalan.edgepaircoverageplugin.ui.PillLabel;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import javax.swing.ImageIcon;
+import javax.swing.border.EmptyBorder;
 
 public class MethodReportPanel extends JPanel {
     private MethodReportDTO methodReportDTO;
@@ -27,6 +33,7 @@ public class MethodReportPanel extends JPanel {
     private void initializeUI() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(new EmptyBorder(10, 0, 10, 10));
         // Crear un panel de información con un fondo personalizado
         // Crear componentes
         /*
@@ -46,16 +53,24 @@ public class MethodReportPanel extends JPanel {
             panel.add(caminosImposiblesLabel);
         }
 
-        PillLabel porcentajeCoberturaLabel = new PillLabel(methodReportDTO.getPorcentajeCobertura() + "%");
-        porcentajeCoberturaLabel.setBackground(Color.GREEN);
-        porcentajeCoberturaLabel.setForeground(Color.WHITE);
+        JBLabel porcentajeCoberturaLabel = new JBLabel(methodReportDTO.getPorcentajeCobertura() + "%");
+        porcentajeCoberturaLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panel.add(porcentajeCoberturaLabel);
+        //porcentajeCoberturaLabel.setBackground(Color.GREEN);
+        //porcentajeCoberturaLabel.setForeground(Color.WHITE);
+
+
+        // Grafo
+        JBLabel tituloGrafo = new JBLabel(UIUtil.ComponentStyle.LARGE);
+        tituloGrafo.setText("Grafo");
+        panel.add(tituloGrafo);
 
         // Grafo como texto
         // JLabel grafoLabel = new JLabel("Grafo: " + methodReportDTO.getGrafo());
         // grafoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
         // Grafo Imagen
-        JLabel grafoImagenLabel = new JLabel();
+        JLabel grafoImagenLabel = new JBLabel();
 
         // Intenta cargar la imagen desde la URL
         try {
@@ -72,14 +87,36 @@ public class MethodReportPanel extends JPanel {
             System.err.println("Error cargando la imagen desde la URL: " + e.getMessage());
             grafoImagenLabel.setText(methodReportDTO.getGrafo());
         }
-
-        // Añadir componentes al panel de información
-        // panel.add(nombreLabel);
-        panel.add(porcentajeCoberturaLabel);
-        // panel.add(grafoLabel);
+        grafoImagenLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel.add(grafoImagenLabel);
 
+        // Situaciones de prueba
 
+        JBLabel tituloSituacionesPrueba = new JBLabel(UIUtil.ComponentStyle.LARGE);
+        tituloSituacionesPrueba.setText("Situaciones de prueba");
+        panel.add(tituloSituacionesPrueba);
+
+        JBPanel situacionPruebaPanel = new JBPanel<>();
+        situacionPruebaPanel.setLayout(new BoxLayout(situacionPruebaPanel, BoxLayout.Y_AXIS));
+        for (SituacionPruebaDTO situacionPruebaDTO : methodReportDTO.getCaminos()) {
+            JBLabel situacionPruebaLabel = new JBLabel(
+                    situacionPruebaDTO.getNodoInicio() + " -> " +
+                            situacionPruebaDTO.getAristaInicioMedio() + " -> " +
+                            situacionPruebaDTO.getNodoMedio() + " -> " +
+                            situacionPruebaDTO.getAristaMedioFinal() + " -> " +
+                            situacionPruebaDTO.getNodoFinal());
+            situacionPruebaLabel.setComponentStyle(UIUtil.ComponentStyle.SMALL);
+            situacionPruebaLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+            if (methodReportDTO.getCaminosCubiertos().contains(situacionPruebaDTO)){
+                situacionPruebaLabel.setIcon(AllIcons.RunConfigurations.TestPassed);
+            }
+            else {
+                situacionPruebaLabel.setIcon(AllIcons.RunConfigurations.TestFailed);
+            }
+            situacionPruebaPanel.add(situacionPruebaLabel);
+        }
+        situacionPruebaPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panel.add(situacionPruebaPanel);
 
         // Crear acordeones para caminos y caminos cubiertos
         JPanel childPanel = createAccordionPanel(methodReportDTO.getNombre(), panel);
