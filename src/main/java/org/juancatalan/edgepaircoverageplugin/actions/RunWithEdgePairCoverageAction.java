@@ -98,8 +98,8 @@ public class RunWithEdgePairCoverageAction extends AnAction {
                 }
 
                 // Obtén la ruta del archivo temporal
-                //String pathAgente = tempFile.getAbsolutePath();
-                String pathAgente = "/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT.jar"; // Ruta al agente
+                String pathAgente = tempFile.getAbsolutePath();
+                //String pathAgente = "/home/juan/.m2/repository/org/juancatalan/edgepaircoverage/0.9-SNAPSHOT/edgepaircoverage-0.9-SNAPSHOT.jar"; // Ruta al agente
 
                 AppSettings.State appSettings = AppSettings.getInstance().getState();
 

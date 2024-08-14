@@ -30,7 +30,7 @@ public class EdgePairCoverageReportWindow {
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(browser.getComponent(), BorderLayout.CENTER);
 
-        setupFileWatcher(project, filePath);
+        //setupFileWatcher(project, filePath);
     }
 
     private void setupFileWatcher(Project project, String filePath) {

@@ -32,7 +32,7 @@ public class EdgePairCoverageReportJSONWindow {
         // Construye la ruta completa al archivo JSON
         String filePath = basePath + "/coverageReport/report.json";
         fillUi(project);
-        setupFileWatcher(project, filePath);
+        //setupFileWatcher(project, filePath);
     }
 
     public void fillUi(Project project) {

@@ -3,33 +3,33 @@ package org.juancatalan.edgepaircoverageplugin.DTO;
 import java.util.Objects;
 
 public class SituacionPruebaDTO {
-    private int nodoInicio;
-    private int nodoMedio;
-    private int nodoFinal;
+    private String nodoInicio;
+    private String nodoMedio;
+    private String nodoFinal;
     private String aristaInicioMedio;
     private String aristaMedioFinal;
 
-    public int getNodoInicio() {
+    public String getNodoInicio() {
         return nodoInicio;
     }
 
-    public void setNodoInicio(int nodoInicio) {
+    public void setNodoInicio(String nodoInicio) {
         this.nodoInicio = nodoInicio;
     }
 
-    public int getNodoMedio() {
+    public String getNodoMedio() {
         return nodoMedio;
     }
 
-    public void setNodoMedio(int nodoMedio) {
+    public void setNodoMedio(String nodoMedio) {
         this.nodoMedio = nodoMedio;
     }
 
-    public int getNodoFinal() {
+    public String getNodoFinal() {
         return nodoFinal;
     }
 
-    public void setNodoFinal(int nodoFinal) {
+    public void setNodoFinal(String nodoFinal) {
         this.nodoFinal = nodoFinal;
     }
 
@@ -64,7 +64,7 @@ public class SituacionPruebaDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SituacionPruebaDTO that)) return false;
-        return nodoInicio == that.nodoInicio && nodoMedio == that.nodoMedio && nodoFinal == that.nodoFinal && Objects.equals(aristaInicioMedio, that.aristaInicioMedio) && Objects.equals(aristaMedioFinal, that.aristaMedioFinal);
+        return Objects.equals(nodoInicio, that.nodoInicio) && Objects.equals(nodoMedio, that.nodoMedio) && Objects.equals(nodoFinal, that.nodoFinal) && Objects.equals(aristaInicioMedio, that.aristaInicioMedio) && Objects.equals(aristaMedioFinal, that.aristaMedioFinal);
     }
 
     @Override

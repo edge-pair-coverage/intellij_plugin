@@ -4,6 +4,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPanel;
+import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import org.juancatalan.edgepaircoverageplugin.DTO.MethodReportDTO;
 import org.juancatalan.edgepaircoverageplugin.DTO.SituacionPruebaDTO;
@@ -27,7 +28,10 @@ public class MethodReportPanel extends JPanel {
     public MethodReportPanel(MethodReportDTO methodReportDTO) {
         this.methodReportDTO = methodReportDTO;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        initializeUI();
+        SwingUtilities.invokeLater(() -> {
+            initializeUI();
+        });
+
     }
 
     private void initializeUI() {
@@ -115,7 +119,7 @@ public class MethodReportPanel extends JPanel {
             }
             situacionPruebaPanel.add(situacionPruebaLabel);
         }
-        situacionPruebaPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        situacionPruebaPanel.setBorder(JBUI.Borders.empty(10));
         panel.add(situacionPruebaPanel);
 
         // Crear acordeones para caminos y caminos cubiertos
