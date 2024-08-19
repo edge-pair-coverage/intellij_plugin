@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.juancatalan"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -18,14 +18,6 @@ intellij {
     type.set("IC") // Target IDE Platform
 
     plugins.set(listOf("java", "JUnit"))
-}
-
-
-dependencies{
-    // https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-batik
-    implementation("com.twelvemonkeys.imageio:imageio-batik:3.11.0")
-    // https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-transcoder
-    implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
 }
 
 tasks {

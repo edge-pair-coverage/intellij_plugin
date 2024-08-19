@@ -22,7 +22,7 @@ public class EdgePairCoverageReportWindow {
         }
 
         // Construye la ruta completa al archivo HTML
-        String filePath = basePath + "/coverageReport/report.html";
+        String filePath = basePath + "/.edgePairCoverage/report.html";
 
         // Inicializa el navegador con la ruta del archivo
         browser = new JBCefBrowser("file://" + filePath);

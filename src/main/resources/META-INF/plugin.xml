@@ -14,9 +14,17 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
-  ]]></description>
+    This plugin add support to measure the Edge-Pair Coverage (also known as Path coverage with depth level 2) during a test suite execution in Java.
+    <br/>
+    To run your code with Edge-Pair coverage you must have a configuration selected and:
+    <ol>
+        <li>Open the <b>Run</b> menu and click <b>Run with Edge-Pair Coverage</b>.</li>
+        <li>Select the methods you want to measure the Edge-Pair Coverage.</li>
+        <li>Indicate if some impossible test situations exists for the methods. This allows the tool to take into account it for the coverage measurement calculation.</li>
+        <li>Results are displayed automatically when execution is finished in the <b>Edge-Pair Coverage Report</b> tool window. You must have Internet connection to render the graphs as images, in other case you'll see the <a href="https://www.graphviz.org/doc/info/lang.html">DOT specification.</a></li>
+    </ol>
+    To configure, open <b>Settings/Preferences | Tools | Edge-Pair Coverage</b>.
+    ]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -33,7 +41,7 @@
                 instance="org.juancatalan.edgepaircoverageplugin.settings.AppSettingsConfigurable"
                 id="org.juancatalan.edgepaircoverageplugin.settings.AppSettingsConfigurable"
                 displayName="Edge-Pair Coverage"/>
-        <iconMapper mappingFile="EdgePairCoverageIconMappings.json"></iconMapper>
+        <iconMapper mappingFile="EdgePairCoverageIconMappings.json"/>
 <!--        <toolWindow id="Edge Pair Coverage Report"-->
 <!--                    factoryClass="org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportWindowFactory"-->
 <!--                    anchor="right"-->

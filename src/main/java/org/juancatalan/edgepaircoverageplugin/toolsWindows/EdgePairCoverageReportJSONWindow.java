@@ -30,7 +30,7 @@ public class EdgePairCoverageReportJSONWindow {
         }
 
         // Construye la ruta completa al archivo JSON
-        String filePath = basePath + "/coverageReport/report.json";
+        String filePath = basePath + "/.edgePairCoverage/report.json";
         fillUi(project);
         //setupFileWatcher(project, filePath);
     }
@@ -43,7 +43,7 @@ public class EdgePairCoverageReportJSONWindow {
         }
 
         // Construye la ruta completa al archivo JSON
-        String filePath = basePath + "/coverageReport/report.json";
+        String filePath = basePath + "/.edgePairCoverage/report.json";
 
         try {
             List<MethodReportDTO> methodReportDTOList = MethodReportJsonParser.parseJSON(filePath);

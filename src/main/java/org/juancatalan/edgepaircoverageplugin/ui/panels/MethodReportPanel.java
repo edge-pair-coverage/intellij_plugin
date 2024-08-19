@@ -37,7 +37,7 @@ public class MethodReportPanel extends JPanel {
     private void initializeUI() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(new EmptyBorder(10, 0, 10, 10));
+        panel.setBorder(JBUI.Borders.empty(10, 0, 10, 10));
         // Crear un panel de información con un fondo personalizado
         // Crear componentes
         /*
@@ -47,18 +47,18 @@ public class MethodReportPanel extends JPanel {
          */
 
         JBLabel tituloPorcentajeCobertura = new JBLabel(UIUtil.ComponentStyle.LARGE);
-        tituloPorcentajeCobertura.setText("Porcentaje de cobertura");
+        tituloPorcentajeCobertura.setText("Coverage percentage");
         panel.add(tituloPorcentajeCobertura);
 
 
         if (methodReportDTO.getCaminosImposibles() > 0){
-            JBLabel caminosImposiblesLabel = new JBLabel("Con " + methodReportDTO.getCaminosImposibles() + " caminos imposibles");
+            JBLabel caminosImposiblesLabel = new JBLabel("With " + methodReportDTO.getCaminosImposibles() + " impossible test situations");
             caminosImposiblesLabel.setComponentStyle(UIUtil.ComponentStyle.SMALL);
             panel.add(caminosImposiblesLabel);
         }
 
         JBLabel porcentajeCoberturaLabel = new JBLabel(methodReportDTO.getPorcentajeCobertura() + "%");
-        porcentajeCoberturaLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        porcentajeCoberturaLabel.setBorder(JBUI.Borders.empty(10));
         panel.add(porcentajeCoberturaLabel);
         //porcentajeCoberturaLabel.setBackground(Color.GREEN);
         //porcentajeCoberturaLabel.setForeground(Color.WHITE);
@@ -66,12 +66,9 @@ public class MethodReportPanel extends JPanel {
 
         // Grafo
         JBLabel tituloGrafo = new JBLabel(UIUtil.ComponentStyle.LARGE);
-        tituloGrafo.setText("Grafo");
+        tituloGrafo.setText("Graph");
         panel.add(tituloGrafo);
 
-        // Grafo como texto
-        // JLabel grafoLabel = new JLabel("Grafo: " + methodReportDTO.getGrafo());
-        // grafoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
         // Grafo Imagen
         JLabel grafoImagenLabel = new JBLabel();
@@ -84,20 +81,18 @@ public class MethodReportPanel extends JPanel {
                 BufferedImage img = ImageIO.read(url);
                 grafoImagenLabel.setIcon(new ImageIcon(img));
             } else {
-                System.err.println("URL de imagen vacía o nula.");
-                grafoImagenLabel.setText("Imagen no disponible");
+                grafoImagenLabel.setText("Image non available");
             }
         } catch (Exception e) {
-            System.err.println("Error cargando la imagen desde la URL: " + e.getMessage());
-            grafoImagenLabel.setText(methodReportDTO.getGrafo());
+            grafoImagenLabel.setText("<html>" + methodReportDTO.getGrafo().replace("\n", "<br/>").replace(" ", "&nbsp;") + "</html>");
         }
-        grafoImagenLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        grafoImagenLabel.setBorder(JBUI.Borders.empty(10));
         panel.add(grafoImagenLabel);
 
         // Situaciones de prueba
 
         JBLabel tituloSituacionesPrueba = new JBLabel(UIUtil.ComponentStyle.LARGE);
-        tituloSituacionesPrueba.setText("Situaciones de prueba");
+        tituloSituacionesPrueba.setText("Test situations");
         panel.add(tituloSituacionesPrueba);
 
         JBPanel situacionPruebaPanel = new JBPanel<>();

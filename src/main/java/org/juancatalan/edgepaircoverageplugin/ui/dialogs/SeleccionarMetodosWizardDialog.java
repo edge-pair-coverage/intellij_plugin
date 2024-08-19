@@ -13,8 +13,8 @@ import java.util.*;
 import java.util.List;
 
 public class SeleccionarMetodosWizardDialog extends DialogWrapper {
-    private final String TITLE_METODO_SELECTOR_PANEL = "Selecciona los métodos a medir la cobertura";
-    private final String TITLE_SITUACIONES_IMPOSIBLES_SELECTOR_PANEL = "Indique el número de situaciones imposibles por método";
+    private final String TITLE_METODO_SELECTOR_PANEL = "Select the methods to measure Edge-Pair coverage";
+    private final String TITLE_SITUACIONES_IMPOSIBLES_SELECTOR_PANEL = "Indicate the number of impossible situations per method";
     private final Project project;
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel = new JPanel(cardLayout);
@@ -22,8 +22,8 @@ public class SeleccionarMetodosWizardDialog extends DialogWrapper {
     private MetodoSelectorPanel metodoSelectorPanel;
     private SituacionesImposiblesSelectorPanel situacionesImposiblesSelectorPanel;
 
-    private final JButton backButton = new JButton("Atrás");
-    private final JButton nextButton = new JButton("Siguiente");
+    private final JButton backButton = new JButton("Previous");
+    private final JButton nextButton = new JButton("Next");
 
     private JPanel currentPanel;
 
@@ -61,7 +61,7 @@ public class SeleccionarMetodosWizardDialog extends DialogWrapper {
                 currentPanel = metodoSelectorPanel;
                 backButton.setEnabled(false);
                 nextButton.setEnabled(true);
-                nextButton.setText("Siguiente");
+                nextButton.setText("Next");
                 setTitle(TITLE_METODO_SELECTOR_PANEL);
             }
         });
@@ -75,14 +75,14 @@ public class SeleccionarMetodosWizardDialog extends DialogWrapper {
                     cardLayout.next(cardPanel);
                     currentPanel = situacionesImposiblesSelectorPanel;
                     backButton.setEnabled(true);
-                    nextButton.setText("OK");
+                    nextButton.setText("Run");
                     setTitle(TITLE_SITUACIONES_IMPOSIBLES_SELECTOR_PANEL);
                 }
                 else {
                     // Mostrar mensaje de advertencia si no se ha seleccionado ningún método
                     JOptionPane.showMessageDialog(this.cardPanel,
-                            "Debe seleccionar al menos un método para continuar.",
-                            "Advertencia",
+                            "You must select at least one method to continue.",
+                            "Warning",
                             JOptionPane.WARNING_MESSAGE);
                 }
             } else if (currentPanel == situacionesImposiblesSelectorPanel) {
