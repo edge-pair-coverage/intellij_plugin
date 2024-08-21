@@ -6,11 +6,13 @@ import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.NotNull;
 import org.juancatalan.edgepaircoverageplugin.DTO.MethodReportDTO;
 import org.juancatalan.edgepaircoverageplugin.DTO.SituacionPruebaDTO;
 import org.juancatalan.edgepaircoverageplugin.ui.PillLabel;
 
 import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -28,9 +30,7 @@ public class MethodReportPanel extends JPanel {
     public MethodReportPanel(MethodReportDTO methodReportDTO) {
         this.methodReportDTO = methodReportDTO;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        SwingUtilities.invokeLater(() -> {
-            initializeUI();
-        });
+        SwingUtilities.invokeLater(this::initializeUI);
 
     }
 
@@ -77,7 +77,7 @@ public class MethodReportPanel extends JPanel {
         try {
             String imageUrl = methodReportDTO.getGrafoImagen();
             if (imageUrl != null && !imageUrl.isEmpty()) {
-                URL url = new URL(imageUrl);
+                URL url = new URI(imageUrl).toURL();
                 BufferedImage img = ImageIO.read(url);
                 grafoImagenLabel.setIcon(new ImageIcon(img));
             } else {
@@ -98,20 +98,7 @@ public class MethodReportPanel extends JPanel {
         JBPanel situacionPruebaPanel = new JBPanel<>();
         situacionPruebaPanel.setLayout(new BoxLayout(situacionPruebaPanel, BoxLayout.Y_AXIS));
         for (SituacionPruebaDTO situacionPruebaDTO : methodReportDTO.getCaminos()) {
-            JBLabel situacionPruebaLabel = new JBLabel(
-                    situacionPruebaDTO.getNodoInicio() + " -> " +
-                            situacionPruebaDTO.getAristaInicioMedio() + " -> " +
-                            situacionPruebaDTO.getNodoMedio() + " -> " +
-                            situacionPruebaDTO.getAristaMedioFinal() + " -> " +
-                            situacionPruebaDTO.getNodoFinal());
-            situacionPruebaLabel.setComponentStyle(UIUtil.ComponentStyle.SMALL);
-            situacionPruebaLabel.setHorizontalTextPosition(SwingConstants.LEADING);
-            if (methodReportDTO.getCaminosCubiertos().contains(situacionPruebaDTO)){
-                situacionPruebaLabel.setIcon(AllIcons.RunConfigurations.TestPassed);
-            }
-            else {
-                situacionPruebaLabel.setIcon(AllIcons.RunConfigurations.TestFailed);
-            }
+            JBLabel situacionPruebaLabel = getSituacionPruebaLabel(situacionPruebaDTO);
             situacionPruebaPanel.add(situacionPruebaLabel);
         }
         situacionPruebaPanel.setBorder(JBUI.Borders.empty(10));
@@ -122,6 +109,24 @@ public class MethodReportPanel extends JPanel {
 
         // Añadir acordeones al panel principal
         add(childPanel);
+    }
+
+    private @NotNull JBLabel getSituacionPruebaLabel(SituacionPruebaDTO situacionPruebaDTO) {
+        JBLabel situacionPruebaLabel = new JBLabel(
+                situacionPruebaDTO.getNodoInicio() + " -> " +
+                        situacionPruebaDTO.getAristaInicioMedio() + " -> " +
+                        situacionPruebaDTO.getNodoMedio() + " -> " +
+                        situacionPruebaDTO.getAristaMedioFinal() + " -> " +
+                        situacionPruebaDTO.getNodoFinal());
+        situacionPruebaLabel.setComponentStyle(UIUtil.ComponentStyle.SMALL);
+        situacionPruebaLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+        if (methodReportDTO.getCaminosCubiertos().contains(situacionPruebaDTO)){
+            situacionPruebaLabel.setIcon(AllIcons.RunConfigurations.TestPassed);
+        }
+        else {
+            situacionPruebaLabel.setIcon(AllIcons.RunConfigurations.TestFailed);
+        }
+        return situacionPruebaLabel;
     }
 
     private JPanel createAccordionPanel(String title, JPanel childPanel) {

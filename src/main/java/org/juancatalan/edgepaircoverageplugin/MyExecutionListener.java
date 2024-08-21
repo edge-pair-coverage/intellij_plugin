@@ -14,9 +14,12 @@ import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.RegisterToolWindowTask;
+import com.intellij.openapi.wm.RegisterToolWindowTaskBuilder;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.util.messages.MessageBusConnection;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.juancatalan.edgepaircoverageplugin.settings.AppSettings;
 import org.juancatalan.edgepaircoverageplugin.toolsWindows.EdgePairCoverageReportJSONWindow;
@@ -38,8 +41,7 @@ public class MyExecutionListener implements ExecutionListener {
     public void processTerminated(@NotNull String executorId, @NotNull ExecutionEnvironment environment, @NotNull ProcessHandler handler, int exitCode) {
         var runProfile = environment.getRunProfile();
 
-        if (runProfile instanceof RunConfiguration) {
-            RunConfiguration runConfiguration = (RunConfiguration) runProfile;
+        if (runProfile instanceof RunConfiguration runConfiguration) {
 
             // Ejecutar la lógica de IU en el EDT
             ApplicationManager.getApplication().invokeLater(() -> {
@@ -67,10 +69,12 @@ public class MyExecutionListener implements ExecutionListener {
         toolWindowManager.invokeLater(() -> {
             if (toolWindowManager.getToolWindow("Edge Pair Coverage Report") != null){
                 ToolWindow toolWindow = toolWindowManager.getToolWindow("Edge Pair Coverage Report");
+                assert toolWindow != null;
                 toolWindow.getContentManager().removeAllContents(true);
                 Icon icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
                 toolWindow.setIcon(icon);
                 AppSettings.State appSettings = AppSettings.getInstance().getState();
+                assert appSettings != null;
                 if (appSettings.reportType.equals(AppSettings.reportType.HTML)){
                     EdgePairCoverageReportWindowFactory factory = new EdgePairCoverageReportWindowFactory();
                     factory.createToolWindowContent(project, toolWindow);
@@ -81,18 +85,26 @@ public class MyExecutionListener implements ExecutionListener {
                 }
             }
             else {
-                toolWindowManager.registerToolWindow(RegisterToolWindowTask.notClosable("Edge Pair Coverage Report"));
-                ToolWindow toolWindow = toolWindowManager.getToolWindow("Edge Pair Coverage Report");
-                Icon icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
-                toolWindow.setIcon(icon);
                 AppSettings.State appSettings = AppSettings.getInstance().getState();
-                if (appSettings.reportType.equals(AppSettings.reportType.HTML)){
-                    EdgePairCoverageReportWindowFactory factory = new EdgePairCoverageReportWindowFactory();
-                    factory.createToolWindowContent(project, toolWindow);
+                if (appSettings.reportType.equals(AppSettings.reportType.HTML)) {
+                    toolWindowManager.registerToolWindow("Edge Pair Coverage Report", new Function1<RegisterToolWindowTaskBuilder, Unit>() {
+                        @Override
+                        public Unit invoke(RegisterToolWindowTaskBuilder registerToolWindowTaskBuilder) {
+                            registerToolWindowTaskBuilder.contentFactory = new EdgePairCoverageReportWindowFactory();
+                            registerToolWindowTaskBuilder.icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
+                            return null;
+                        }
+                    });
                 }
                 else {
-                    EdgePairCoverageReportJSONWindowFactory factory = new EdgePairCoverageReportJSONWindowFactory();
-                    factory.createToolWindowContent(project, toolWindow);
+                    toolWindowManager.registerToolWindow("Edge Pair Coverage Report", new Function1<RegisterToolWindowTaskBuilder, Unit>() {
+                        @Override
+                        public Unit invoke(RegisterToolWindowTaskBuilder registerToolWindowTaskBuilder) {
+                            registerToolWindowTaskBuilder.contentFactory = new EdgePairCoverageReportJSONWindowFactory();
+                            registerToolWindowTaskBuilder.icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
+                            return null;
+                        }
+                    });
                 }
             }
 
