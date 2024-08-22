@@ -64,9 +64,6 @@ public class RunWithEdgePairCoverageAction extends AnAction {
             SeleccionarMetodosWizardDialog dialog = new SeleccionarMetodosWizardDialog(project);
             //MetodoSelectorDialog dialog = new MetodoSelectorDialog(project);
             if (dialog.showAndGet()) {
-                System.out.println(dialog.methodsSituacionesImposiblesMap());
-                System.out.println(dialog.methodsSituacionesImposiblesMap().keySet().stream()
-                        .map(m -> PsiMethodToFullMethodName.transform(m)).toList());
                 // Obtener métodos seleccionados y ejecutar con -javaagent
                 ejecutarConJavaAgent(project, dialog.methodsSituacionesImposiblesMap());
             }

@@ -102,15 +102,18 @@ public class MetodoSelectorPanel extends JPanel {
                         if (element instanceof PsiClass) {
                             PsiClass psiClass = (PsiClass) element;
 
-                            CheckedTreeNode classNode = new CheckedTreeNode(psiClass);
+                            // Comprobar que no sea una clase anonima
+                            if (psiClass.getQualifiedName() != null){
+                                CheckedTreeNode classNode = new CheckedTreeNode(psiClass);
 
-                            for (PsiMethod method : psiClass.getMethods()) {
-                                CheckedTreeNode methodNode = new CheckedTreeNode(method);
-                                classNode.add(methodNode);
-                            }
+                                for (PsiMethod method : psiClass.getMethods()) {
+                                    CheckedTreeNode methodNode = new CheckedTreeNode(method);
+                                    classNode.add(methodNode);
+                                }
 
-                            if (classNode.getChildCount() > 0) {
-                                rootNode.add(classNode);
+                                if (classNode.getChildCount() > 0) {
+                                    rootNode.add(classNode);
+                                }
                             }
                         }
                     }
