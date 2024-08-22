@@ -13,10 +13,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.wm.RegisterToolWindowTask;
-import com.intellij.openapi.wm.RegisterToolWindowTaskBuilder;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.openapi.wm.*;
 import com.intellij.util.messages.MessageBusConnection;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -44,15 +41,10 @@ public class MyExecutionListener implements ExecutionListener {
         if (runProfile instanceof RunConfiguration runConfiguration) {
 
             // Ejecutar la lógica de IU en el EDT
-            ApplicationManager.getApplication().invokeLater(() -> {
+            //ApplicationManager.getApplication().invokeLater(() -> {
                 //Messages.showInfoMessage(project, "Ejecución terminada para: " + runConfiguration.getName(), "Información");
                 ejecutarAccionPostEjecucion(runConfiguration, exitCode);
-            });
-        } else {
-            // Ejecutar la lógica de IU en el EDT
-            ApplicationManager.getApplication().invokeLater(() -> {
-                // Messages.showInfoMessage(project, "Ejecución terminada para perfil no específico: " + runProfile.getName(), "Información");
-            });
+            //});
         }
         MyExecutionListener.unregisterListener();
     }
@@ -92,6 +84,7 @@ public class MyExecutionListener implements ExecutionListener {
                         public Unit invoke(RegisterToolWindowTaskBuilder registerToolWindowTaskBuilder) {
                             registerToolWindowTaskBuilder.contentFactory = new EdgePairCoverageReportWindowFactory();
                             registerToolWindowTaskBuilder.icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
+                            registerToolWindowTaskBuilder.anchor = ToolWindowAnchor.RIGHT;
                             return null;
                         }
                     });
@@ -102,6 +95,7 @@ public class MyExecutionListener implements ExecutionListener {
                         public Unit invoke(RegisterToolWindowTaskBuilder registerToolWindowTaskBuilder) {
                             registerToolWindowTaskBuilder.contentFactory = new EdgePairCoverageReportJSONWindowFactory();
                             registerToolWindowTaskBuilder.icon = IconLoader.getIcon("/icons/coverageReport.svg", getClass());
+                            registerToolWindowTaskBuilder.anchor = ToolWindowAnchor.RIGHT;
                             return null;
                         }
                     });
