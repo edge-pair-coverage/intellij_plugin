@@ -23,8 +23,23 @@
         <li>Indicate if some impossible test situations exists for the methods. This allows the tool to take into account it for the coverage measurement calculation.</li>
         <li>Results are displayed automatically when execution is finished in the <b>Edge-Pair Coverage Report</b> tool window. You must have Internet connection to render the graphs as images, in other case you'll see the <a href="https://www.graphviz.org/doc/info/lang.html">DOT specification.</a></li>
     </ol>
+    <br/>
     To configure, open <b>Settings/Preferences | Tools | Edge-Pair Coverage</b>.
     ]]></description>
+
+    <change-notes>
+        <![CDATA[
+            <h1>1.0.2</h1>
+            <ul>
+                <li>Update IntelliJ IDE compatibility range</li>
+            </ul>
+            <h1>1.0.1</h1>
+            <ul>
+                <li>Fix bug: method selector breaks if an anonymous class exists</li>
+                <li>Improve some threading problems</li>
+            </ul>
+        ]]>
+    </change-notes>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
